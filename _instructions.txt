@@ -1,0 +1,3 @@
+> conda activate gputest 
+
+> python predict_score.py --data images1/restored/3.png --checkpoint model_best.pth.tar
