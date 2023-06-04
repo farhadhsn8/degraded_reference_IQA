@@ -59,16 +59,16 @@ parser.add_argument('--topk', default=5, type=int,
 
 
 def main():
-    setup_default_logging()
+    # setup_default_logging()
     args = parser.parse_args()
     # might as well try to do something useful...
-    args.pretrained = args.pretrained or not args.checkpoint
+    # args.pretrained = args.pretrained or not args.checkpoint
 
     # create model
     model = ckdn.model()
     #model = vgg.vgg16()
-    logging.info('Model %s created, param count: %d' %
-                 (args.model, sum([m.numel() for m in model.parameters()])))
+    # logging.info('Model %s created, param count: %d' %
+    #              (args.model, sum([m.numel() for m in model.parameters()])))
 
     state_dicts = torch.load(args.checkpoint)['state_dict']
     new_state_dict = {}
@@ -77,24 +77,25 @@ def main():
 
     model.load_state_dict(new_state_dict,strict=False) 
 
-    config = resolve_data_config(vars(args), model=model)
-    model, test_time_pool = model, False #apply_test_time_pool(model, config, args)
+    cnf = {
+         "interpolation":"",
+         "mean":None,
+         "model":"resnet",
+         "std":None,
+           }
 
-    if args.num_gpu > 1:
+
+    config = resolve_data_config(cnf, model=model)
+    # model, test_time_pool = model, False #apply_test_time_pool(model, config, args)
+
+    num_gpu = 1
+
+    if num_gpu > 1:
         model = torch.nn.DataParallel(model, device_ids=list(range(args.num_gpu))).cuda()
     else:
         model = model.cuda()
 
-    # loader = create_loader(
-    #     Dataset(args.data,'images'),
-    #     input_size=config['input_size'],
-    #     batch_size=args.batch_size,
-    #     use_prefetcher=True,
-    #     interpolation=config['interpolation'],
-    #     mean=config['mean'],
-    #     std=config['std'],
-    #     num_workers=args.workers,
-    #     crop_pct=0.875)
+ 
 
     model.eval()
 

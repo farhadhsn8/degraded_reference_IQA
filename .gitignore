@@ -1,2 +1,9 @@
 *.tar
 /ckdn*
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.BMP
+*.zip
+*.rar
