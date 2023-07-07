@@ -61,6 +61,26 @@ class IQA_CKDN:
             self.model = self.model.cuda()
 
 
+
+
+
+    def get_DTE_features(self , img_addr): # 7.7.2023
+        self.model.eval()
+
+
+        with torch.no_grad():
+            img = Image.open(img_addr).convert('RGB')
+
+            my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
+            img = my_transform(img) 
+
+            output = self.model.extract_DTE_features(img.unsqueeze(0).cuda())
+            return output.cpu().numpy()
+
+
+
+
+
     def predict(self, restored_addr , degraded_addr):
         self.model.eval()
 
