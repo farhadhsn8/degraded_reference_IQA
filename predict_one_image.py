@@ -23,10 +23,7 @@ import ckdn
 
 torch.backends.cudnn.benchmark = True
 
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+
 
 
 class IQA_CKDN:
@@ -81,7 +78,7 @@ class IQA_CKDN:
 
 
 
-    def predict(self, restored_addr , degraded_addr):
+    def predict(self, restored_addr , degraded_addr): # dist , ref
         self.model.eval()
 
 
@@ -92,7 +89,7 @@ class IQA_CKDN:
             my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
             rest = my_transform(rest)  
             dist = my_transform(dist)
-            output = self.model.forward_test(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda())
+            output = self.model.forward_test(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda()) # dist , ref
             return output[:,0].cpu().numpy()[0]
 
 # def IQA(restored_addr , degraded_addr):
