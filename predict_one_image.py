@@ -73,6 +73,35 @@ class IQA_CKDN:
 
             output = self.model.extract_DTE_features(img.unsqueeze(0).cuda())
             return output.cpu().numpy()
+        
+
+    def get_QSE_features(self , img_addr): # 8.18.2023
+        self.model.eval()
+
+
+        with torch.no_grad():
+            img = Image.open(img_addr).convert('RGB')
+
+            my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
+            img = my_transform(img) 
+
+            output = self.model.extract_QSE_features(img.unsqueeze(0).cuda())
+            return output.cpu().numpy()
+        
+
+    def get_QSE_minus_DTE_features(self , restored_addr , degraded_addr): # 8.18.2023  # dist , ref
+        self.model.eval()
+
+
+        with torch.no_grad():
+            rest = Image.open(restored_addr).convert('RGB')
+            dist = Image.open(degraded_addr).convert('RGB')
+
+            my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
+            rest = my_transform(rest)  
+            dist = my_transform(dist)
+            output = self.model.extract_QSE_after_minus_features(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda()) # dist , ref
+            return output.cpu().numpy()
 
 
 
