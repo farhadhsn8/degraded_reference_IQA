@@ -57,7 +57,6 @@ class IQA_CKDN:
             self.model = self.model.cuda()
 
 
-<<<<<<< Updated upstream
 
 
 
@@ -107,10 +106,23 @@ class IQA_CKDN:
 
 
 
+    def extract_last_features(self, restored_addr , degraded_addr): # dist , ref
+        self.model.eval()
+
+        with torch.no_grad():
+            rest = Image.open(restored_addr).convert('RGB')
+            dist = Image.open(degraded_addr).convert('RGB')
+
+            my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
+            rest = my_transform(rest)  
+            dist = my_transform(dist)
+            output = self.model.extract_last_features(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda()) # dist , ref
+            return output.cpu().numpy()
+
+
+
+
     def predict(self, restored_addr , degraded_addr): # dist , ref
-=======
-    def predict(self, restored_addr , degraded_addr):
->>>>>>> Stashed changes
         self.model.eval()
 
 
@@ -121,11 +133,7 @@ class IQA_CKDN:
             my_transform = transforms.Compose([create_transform(input_size=self.config['input_size'])])
             rest = my_transform(rest)  
             dist = my_transform(dist)
-<<<<<<< Updated upstream
             output = self.model.forward_test(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda()) # dist , ref
-=======
-            output = self.model.forward_test(rest.unsqueeze(0).cuda() , dist.unsqueeze(0).cuda())
->>>>>>> Stashed changes
             return output[:,0].cpu().numpy()[0]
 
 # def IQA(restored_addr , degraded_addr):
