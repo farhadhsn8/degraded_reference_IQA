@@ -23,14 +23,6 @@ import ckdn
 
 torch.backends.cudnn.benchmark = True
 
-<<<<<<< Updated upstream
-
-=======
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
->>>>>>> Stashed changes
 
 
 class IQA_CKDN:

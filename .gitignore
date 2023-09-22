@@ -7,8 +7,12 @@
 *.BMP
 *.zip
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 *.rar
 *.npy
+=======
+*.rar
+>>>>>>> Stashed changes
 =======
 *.rar
 >>>>>>> Stashed changes
